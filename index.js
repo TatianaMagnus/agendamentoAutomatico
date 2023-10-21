@@ -175,19 +175,14 @@ turmas = {
 const periodosPorDia = 5;
 const diasDaSemana = ["segunda", "terca", "quarta", "quinta", "sexta"];
 const professoresLivresPorDia = {};
-const professoresOcupadosPorDia = {};
 
 diasDaSemana.forEach((dia) => {
   professoresLivresPorDia[dia] = { qtd: 0 };
-  professoresOcupadosPorDia[dia] = { qtd: 0 };
   for (materia in materias) {
     for (professor in materias[materia]) {
       if (materias[materia][professor][dia]) {
         professoresLivresPorDia[dia][professor] = materia;
         professoresLivresPorDia[dia]["qtd"]++;
-      } else {
-        professoresOcupadosPorDia[dia][professor] = materia;
-        professoresOcupadosPorDia[dia]["qtd"]++;
       }
     }
   }
@@ -207,8 +202,8 @@ const periodosLivresPorTurma = {};
 const periodosLivresPorProfessor = {};
 const qtdPeriodosPorDia = 5;
 
-const modeloDiaLivre = { qtd: 5 };
-for (let i = 1; i <= 5; i++) {
+const modeloDiaLivre = { qtd: qtdPeriodosPorDia };
+for (let i = 1; i <= qtdPeriodosPorDia; i++) {
   modeloDiaLivre[i] = true;
 }
 
@@ -263,8 +258,7 @@ for (turma in periodosLivresPorTurma) {
               `${professor} - ${professorSelecionado[dia]["materia"]}` !==
               horario[dia][turma][Number(periodo) - 1]
             ) {
-              materiasNecessarias[professorSelecionado[dia]["materia"]] =
-                materiasNecessarias[professorSelecionado[dia]["materia"]] - 1;
+              materiasNecessarias[professorSelecionado[dia]["materia"]]--;
               periodosLivresPorTurma[turma][dia][periodo] = false;
               periodosLivresPorProfessor[professor][dia][periodo] = false;
               horario[dia][turma][
@@ -278,6 +272,7 @@ for (turma in periodosLivresPorTurma) {
                 `${professor} - ${professorSelecionado[dia]["materia"]}` !==
                   horario[dia][turma][Number(periodo) - 1]
               ) {
+                materiasNecessarias[professorSelecionado[dia]["materia"]]--;
                 periodosLivresPorTurma[turma][dia][Number(periodo) + 1] = false;
                 periodosLivresPorProfessor[professor][dia][
                   Number(periodo) + 1
